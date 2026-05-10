@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+# other
+planning.txt
