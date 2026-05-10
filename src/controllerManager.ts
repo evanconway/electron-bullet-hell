@@ -1,20 +1,11 @@
 const AXIS_DEADZONE = 0.2;
 
-type ControllerButton = {
-  index: number;
-  pressed: boolean;
-  down: boolean;
-};
-
-type ControllerAxis = {
-  pressed: boolean;
-  down: boolean;
-};
+type GameInput = { pressed: boolean; down: boolean };
 
 type Controller = {
   index: number;
-  buttons: ControllerButton[];
-  axes: { index: number; positive: ControllerAxis; negative: ControllerAxis }[];
+  buttons: { index: number; input: GameInput }[];
+  axes: { index: number; positive: GameInput; negative: GameInput }[];
 };
 
 const connectedControllers = new Map<number, Controller>();
@@ -26,8 +17,10 @@ window.addEventListener("gamepadconnected", ({ gamepad }) => {
     index: gamepad.index,
     buttons: gamepad.buttons.map((_, index) => ({
       index,
-      pressed: false,
-      down: false,
+      input: {
+        pressed: false,
+        down: false,
+      },
     })),
     axes: gamepad.axes.map((_, index) => ({
       index,
@@ -68,16 +61,16 @@ class ControllerManager {
       for (const controllerButton of controller.buttons) {
         const { index } = controllerButton;
         const gamepadButtonIsDown = gamepad.buttons[index].pressed;
-        if (gamepadButtonIsDown && !controllerButton.down) {
-          controllerButton.pressed = true;
-          controllerButton.down = true;
+        if (gamepadButtonIsDown && !controllerButton.input.down) {
+          controllerButton.input.pressed = true;
+          controllerButton.input.down = true;
           this.indexOfLastActiveController = controller.index;
-        } else if (gamepadButtonIsDown && controllerButton.down) {
-          controllerButton.pressed = false;
-          controllerButton.down = true;
+        } else if (gamepadButtonIsDown && controllerButton.input.down) {
+          controllerButton.input.pressed = false;
+          controllerButton.input.down = true;
         } else {
-          controllerButton.pressed = false;
-          controllerButton.down = false;
+          controllerButton.input.pressed = false;
+          controllerButton.input.down = false;
         }
       }
       for (const controllerAxis of controller.axes) {
@@ -125,6 +118,21 @@ class ControllerManager {
       this.indexOfLastActiveController,
     );
     return lastActiveController !== undefined ? lastActiveController : null;
+  }
+
+  getLastActiveGamepad() {
+    const controller = this.getLastActiveController();
+    if (controller === null) return null;
+    return {
+      up: controller.axes[1].negative,
+      down: controller.axes[1].positive,
+      left: controller.axes[0].negative,
+      right: controller.axes[0].positive,
+      start: controller.buttons[9].input,
+      select: controller.buttons[8].input,
+      a: controller.buttons[1].input,
+      b: controller.buttons[0].input,
+    };
   }
 }
 

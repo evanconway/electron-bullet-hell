@@ -34,21 +34,35 @@ console.log(
 
 const draw = () => {
   controllerManager.pollGamepadApi();
-  const lastActiveController = controllerManager.getLastActiveController();
-  const index = lastActiveController?.index;
-  lastActiveController?.axes.forEach((axis) => {
-    if (axis.positive.pressed) {
-      console.log(`controller ${index} axis ${axis.index} positive pressed`);
+
+  const gamepad = controllerManager.getLastActiveGamepad();
+  if (gamepad !== null) {
+    if (gamepad.up.pressed) {
+      console.log("up");
     }
-    if (axis.negative.pressed) {
-      console.log(`controller ${index} axis ${axis.index} negative pressed`);
+    if (gamepad.down.pressed) {
+      console.log("down");
     }
-  });
-  lastActiveController?.buttons.forEach((button) => {
-    if (button.pressed) {
-      console.log(`controller ${index} button ${button.index} pressed`);
+    if (gamepad.left.pressed) {
+      console.log("left");
     }
-  });
+    if (gamepad.right.pressed) {
+      console.log("right");
+    }
+    if (gamepad.start.pressed) {
+      console.log("start");
+    }
+    if (gamepad.select.pressed) {
+      console.log("select");
+    }
+    if (gamepad.a.pressed) {
+      console.log("a");
+    }
+    if (gamepad.b.pressed) {
+      console.log("b");
+    }
+  }
+
   window.requestAnimationFrame(draw);
 };
 
