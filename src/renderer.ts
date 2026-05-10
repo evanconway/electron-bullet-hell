@@ -1,5 +1,6 @@
 import "./index.css";
-import controllerManager from "./controllerManager";
+import { setupCanvas } from "./canvas";
+
 /**
  * This file will automatically be loaded by vite and run in the "renderer" context.
  * To learn more about the differences between the "main" and the "renderer" context in
@@ -28,42 +29,4 @@ import controllerManager from "./controllerManager";
  * ```
  */
 
-console.log(
-  '👋 This message is being logged by "renderer.ts", included via Vite',
-);
-
-const draw = () => {
-  controllerManager.pollGamepadApi();
-
-  const gamepad = controllerManager.getLastActiveGamepad();
-  if (gamepad !== null) {
-    if (gamepad.up.pressed) {
-      console.log("up");
-    }
-    if (gamepad.down.pressed) {
-      console.log("down");
-    }
-    if (gamepad.left.pressed) {
-      console.log("left");
-    }
-    if (gamepad.right.pressed) {
-      console.log("right");
-    }
-    if (gamepad.start.pressed) {
-      console.log("start");
-    }
-    if (gamepad.select.pressed) {
-      console.log("select");
-    }
-    if (gamepad.a.pressed) {
-      console.log("a");
-    }
-    if (gamepad.b.pressed) {
-      console.log("b");
-    }
-  }
-
-  window.requestAnimationFrame(draw);
-};
-
-draw();
+setupCanvas();
