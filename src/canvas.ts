@@ -1,76 +1,38 @@
-import controllerManager from "./controllerManager";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./screen";
 
-const SCREEN_WIDTH = 800;
-const SCREEN_HEIGHT = 600;
-
-export const setupCanvas = () => {
+const resize = () => {
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-
   canvas.setAttribute("width", `${SCREEN_WIDTH}`);
   canvas.setAttribute("height", `${SCREEN_HEIGHT}`);
   canvas.style.width = `${SCREEN_WIDTH}px`;
   canvas.style.height = `${SCREEN_HEIGHT}px`;
+};
 
-  const ctx = canvas.getContext("2d");
+window.addEventListener("resize", resize);
+resize();
 
-  const playerPos = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 2 };
+export const setupCanvas = (
+  draw: (params: { frameTime: number; ctx: CanvasRenderingContext2D }) => void,
+) => {
+  const ctx = (
+    document.getElementById("canvas") as HTMLCanvasElement
+  ).getContext("2d");
 
   if (ctx) {
-    const draw = () => {
-      controllerManager.pollGamepadApi();
-      const gamepad = controllerManager.getLastActiveGamepad();
-      if (gamepad !== null) {
-        if (gamepad.up.pressed) {
-          console.log("up");
-        }
-        if (gamepad.down.pressed) {
-          console.log("down");
-        }
-        if (gamepad.left.pressed) {
-          console.log("left");
-        }
-        if (gamepad.right.pressed) {
-          console.log("right");
-        }
-        if (gamepad.start.pressed) {
-          console.log("start");
-        }
-        if (gamepad.select.pressed) {
-          console.log("select");
-        }
-        if (gamepad.a.pressed) {
-          console.log("a");
-        }
-        if (gamepad.b.pressed) {
-          console.log("b");
-        }
-
-        if (gamepad.up.down) {
-          playerPos.y -= 1;
-        }
-        if (gamepad.down.down) {
-          playerPos.y += 1;
-        }
-        if (gamepad.left.down) {
-          playerPos.x -= 1;
-        }
-        if (gamepad.right.down) {
-          playerPos.x += 1;
-        }
-      }
+    let lastFrameTime = Date.now();
+    const animate = () => {
+      const currentFrameTime = Date.now();
 
       ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-      ctx.strokeStyle = "#fff";
-      ctx.beginPath();
-      ctx.arc(playerPos.x, playerPos.y, 10, 0, Math.PI * 2);
-      ctx.stroke();
+      draw({ frameTime: currentFrameTime - lastFrameTime, ctx });
+      lastFrameTime = currentFrameTime;
 
-      window.requestAnimationFrame(draw);
+      window.requestAnimationFrame(animate);
     };
 
-    draw();
+    animate();
   }
 };
