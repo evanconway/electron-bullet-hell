@@ -19,12 +19,23 @@ class ControllerManager {
     const gamepads = window.navigator.getGamepads();
     for (const gpIndex of connectedGamepadIndexes.values()) {
       const gamepad = gamepads[gpIndex];
-      console.log(
-        gamepad.buttons.reduce(
-          (result, button) => button.pressed || result,
-          false,
-        ),
-      );
+      const buttonsPressed = gamepad.buttons
+        .map((b, i) => ({
+          i,
+          pressed: b.pressed,
+          touched: b.touched,
+          value: b.value,
+        }))
+        .filter((b) => b.pressed);
+      const axisOn = gamepad.axes
+        .map((a, i) => ({
+          i,
+          value: a,
+        }))
+        .filter((a) => a.value !== 0);
+      if (buttonsPressed.length > 0 || axisOn.length > 0) {
+        console.log({ buttonsPressed, axisOn });
+      }
     }
   }
 }
