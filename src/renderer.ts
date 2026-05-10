@@ -1,3 +1,4 @@
+import "./index.css";
 import controllerManager from "./controllerManager";
 /**
  * This file will automatically be loaded by vite and run in the "renderer" context.
@@ -27,14 +28,27 @@ import controllerManager from "./controllerManager";
  * ```
  */
 
-import "./index.css";
-
 console.log(
   '👋 This message is being logged by "renderer.ts", included via Vite',
 );
 
 const draw = () => {
-  controllerManager.logGamepadsWithPressedButtons();
+  controllerManager.pollGamepadApi();
+  const lastActiveController = controllerManager.getLastActiveController();
+  const index = lastActiveController?.index;
+  lastActiveController?.axes.forEach((axis) => {
+    if (axis.positive.pressed) {
+      console.log(`controller ${index} axis ${axis.index} positive pressed`);
+    }
+    if (axis.negative.pressed) {
+      console.log(`controller ${index} axis ${axis.index} negative pressed`);
+    }
+  });
+  lastActiveController?.buttons.forEach((button) => {
+    if (button.pressed) {
+      console.log(`controller ${index} button ${button.index} pressed`);
+    }
+  });
   window.requestAnimationFrame(draw);
 };
 
