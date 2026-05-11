@@ -7,6 +7,11 @@ spaceship.src = "../../assets/spaceship.png";
 
 const DEFAULT_TICK_TIME = (1 / 60) * 1000;
 
+const audioContext = new AudioContext();
+const shootSound = new Audio("../../assets/shoot.wav");
+const shootTrack = audioContext.createMediaElementSource(shootSound);
+shootTrack.connect(audioContext.destination);
+
 export class ExampleGameplay extends Gameplay {
   private playerPosition: { x: number; y: number };
   private movementSpeed: number;
@@ -21,7 +26,7 @@ export class ExampleGameplay extends Gameplay {
     this.movementSpeed = 4;
     this.bulletIndex = 0;
     this.bullets = new Map();
-    this.bulletSpeed = 8;
+    this.bulletSpeed = 9;
     this.bulletFireCooldown = 0;
   }
 
@@ -58,6 +63,9 @@ export class ExampleGameplay extends Gameplay {
     this.bulletFireCooldown = Math.max(this.bulletFireCooldown - timePassed, 0);
 
     if (input.y.down && this.bulletFireCooldown <= 0) {
+      shootSound.pause();
+      shootSound.currentTime = 0;
+      shootSound.play();
       this.bulletFireCooldown += 100;
       this.bullets.set(this.bulletIndex, {
         x: this.playerPosition.x,
