@@ -13,6 +13,7 @@ export class ExampleGameplay extends Gameplay {
   private bulletIndex: number;
   private bullets: Map<number, { x: number; y: number }>;
   private bulletSpeed: number;
+  private bulletFireCooldown: number;
 
   constructor() {
     super();
@@ -21,6 +22,7 @@ export class ExampleGameplay extends Gameplay {
     this.bulletIndex = 0;
     this.bullets = new Map();
     this.bulletSpeed = 8;
+    this.bulletFireCooldown = 0;
   }
 
   update(input: GameplayController, timePassed: number): void {
@@ -53,7 +55,10 @@ export class ExampleGameplay extends Gameplay {
       SCREEN_HEIGHT - spaceshipHeight,
     );
 
-    if (input.y.pressed) {
+    this.bulletFireCooldown = Math.max(this.bulletFireCooldown - timePassed, 0);
+
+    if (input.y.down && this.bulletFireCooldown <= 0) {
+      this.bulletFireCooldown += 100;
       this.bullets.set(this.bulletIndex, {
         x: this.playerPosition.x,
         y: this.playerPosition.y - 5,
@@ -85,7 +90,7 @@ export class ExampleGameplay extends Gameplay {
     ctx.strokeStyle = "#fff";
     this.bullets.forEach((bullet) => {
       ctx.beginPath();
-      ctx.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
+      ctx.arc(bullet.x, bullet.y, 2, 0, Math.PI * 2);
       ctx.stroke();
     });
     this.drawPlayer(ctx);
