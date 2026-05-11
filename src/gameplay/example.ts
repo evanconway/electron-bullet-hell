@@ -32,7 +32,7 @@ export class ExampleGameplay extends Gameplay {
 
   update(input: GameplayController, timePassed: number): void {
     const timeMod = timePassed / DEFAULT_TICK_TIME;
-    const mv = this.movementSpeed * timeMod;
+    const mv = this.movementSpeed * timeMod * (input.x.down ? 0.6 : 1);
     if (input.up.down) {
       this.playerPosition.y -= mv;
     }
