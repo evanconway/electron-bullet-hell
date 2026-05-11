@@ -17,6 +17,8 @@ export type GameplayController = {
   select: GameInput;
   a: GameInput;
   b: GameInput;
+  y: GameInput;
+  x: GameInput;
 };
 
 const connectedControllers = new Map<number, Controller>();
@@ -143,6 +145,8 @@ class ControllerManager {
       select: controller.buttons[8].input,
       a: controller.buttons[1].input,
       b: controller.buttons[0].input,
+      y: controller.buttons[2].input,
+      x: controller.buttons[3].input,
     };
     return gameplayController;
   }
