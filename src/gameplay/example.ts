@@ -32,6 +32,20 @@ export class ExampleGameplay extends Gameplay {
     if (input.right.down) {
       this.playerPosition.x += mv;
     }
+
+    const spaceshipWidth = spaceship.width / 2;
+    const spaceshipHeight = spaceship.height / 2;
+
+    this.playerPosition.x = Math.max(this.playerPosition.x, spaceshipWidth);
+    this.playerPosition.y = Math.max(this.playerPosition.y, spaceshipHeight);
+    this.playerPosition.x = Math.min(
+      this.playerPosition.x,
+      SCREEN_WIDTH - spaceshipWidth,
+    );
+    this.playerPosition.y = Math.min(
+      this.playerPosition.y,
+      SCREEN_HEIGHT - spaceshipHeight,
+    );
   }
 
   render(ctx: CanvasRenderingContext2D): void {

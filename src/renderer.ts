@@ -34,7 +34,7 @@ import { ExampleGameplay } from "./gameplay/example";
 const exampleGameplay = new ExampleGameplay();
 
 let accumulateFrameTime = 0;
-const TICK_RATE = (1 / 144) * 1000;
+const TICK_RATE = (1 / 60) * 1000;
 
 setupCanvas(({ frameTime, ctx }) => {
   accumulateFrameTime += frameTime;
