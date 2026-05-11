@@ -1,11 +1,16 @@
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "./screen";
 
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+canvas.setAttribute("width", `${SCREEN_WIDTH}`);
+canvas.setAttribute("height", `${SCREEN_HEIGHT}`);
+
 const resize = () => {
-  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-  canvas.setAttribute("width", `${SCREEN_WIDTH}`);
-  canvas.setAttribute("height", `${SCREEN_HEIGHT}`);
-  canvas.style.width = `${SCREEN_WIDTH}px`;
-  canvas.style.height = `${SCREEN_HEIGHT}px`;
+  const scaleWidth = Math.floor(window.innerWidth / SCREEN_WIDTH);
+  const scaleHeight = Math.floor(window.innerHeight / SCREEN_HEIGHT);
+  const resolutionScale = Math.max(Math.min(scaleWidth, scaleHeight), 1);
+
+  canvas.style.width = `${resolutionScale * SCREEN_WIDTH}px`;
+  canvas.style.height = `${resolutionScale * SCREEN_HEIGHT}px`;
 };
 
 window.addEventListener("resize", resize);
