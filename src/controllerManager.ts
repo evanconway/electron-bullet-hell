@@ -8,6 +8,17 @@ type Controller = {
   axes: { index: number; positive: GameInput; negative: GameInput }[];
 };
 
+export type GameplayController = {
+  up: GameInput;
+  down: GameInput;
+  left: GameInput;
+  right: GameInput;
+  start: GameInput;
+  select: GameInput;
+  a: GameInput;
+  b: GameInput;
+};
+
 const connectedControllers = new Map<number, Controller>();
 
 window.addEventListener("gamepadconnected", ({ gamepad }) => {
@@ -120,10 +131,10 @@ class ControllerManager {
     return lastActiveController !== undefined ? lastActiveController : null;
   }
 
-  getLastActiveGamepad() {
+  getLastActiveGamepad(): GameplayController | null {
     const controller = this.getLastActiveController();
     if (controller === null) return null;
-    return {
+    const gameplayController: GameplayController = {
       up: controller.axes[1].negative,
       down: controller.axes[1].positive,
       left: controller.axes[0].negative,
@@ -133,6 +144,7 @@ class ControllerManager {
       a: controller.buttons[1].input,
       b: controller.buttons[0].input,
     };
+    return gameplayController;
   }
 }
 
