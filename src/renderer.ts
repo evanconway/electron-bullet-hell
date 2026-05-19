@@ -1,7 +1,7 @@
 import "./index.css";
 import { setupCanvas } from "./canvas";
 import controllerManager from "./controllerManager";
-import { ExampleGameplay } from "./gameplay/example";
+import { ExampleGameplay } from "./gameplay/Example";
 
 /**
  * This file will automatically be loaded by vite and run in the "renderer" context.
