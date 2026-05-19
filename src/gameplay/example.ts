@@ -65,6 +65,7 @@ export class ExampleGameplay extends Gameplay {
     if (input.y.down && this.bulletFireCooldown <= 0) {
       shootSound.pause();
       shootSound.currentTime = 0;
+      shootSound.volume = 0.2;
       shootSound.play();
       this.bulletFireCooldown += 100;
       this.bullets.set(this.bulletIndex, {
