@@ -2,6 +2,7 @@ import "./index.css";
 import { setupCanvas } from "./canvas";
 import controllerManager from "./controllerManager";
 import { ExampleGameplay } from "./gameplay/Example";
+import { EnemiesGameplay } from "./gameplay/Enemies";
 
 /**
  * This file will automatically be loaded by vite and run in the "renderer" context.
@@ -31,7 +32,7 @@ import { ExampleGameplay } from "./gameplay/Example";
  * ```
  */
 
-const exampleGameplay = new ExampleGameplay();
+const gameplay = new EnemiesGameplay();
 
 let accumulateFrameTime = 0;
 const TICK_RATE = (1 / 60) * 1000;
@@ -44,9 +45,9 @@ setupCanvas(({ frameTime, ctx }) => {
     controllerManager.pollGamepadApi();
     const gamepad = controllerManager.getLastActiveGamepad();
     if (gamepad) {
-      exampleGameplay.update(gamepad, TICK_RATE);
+      gameplay.update(gamepad, TICK_RATE);
     }
   }
 
-  exampleGameplay.render(ctx);
+  gameplay.render(ctx);
 });
