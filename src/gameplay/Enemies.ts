@@ -5,15 +5,18 @@ import Player from "../game/player";
 import Bullet from "../game/bullet";
 import { DEFAULT_TICK_RATE } from "../constants";
 import { playSound, Sound } from "../game/sound";
+import Enemy from "../game/enemy";
 
 export class EnemiesGameplay extends Gameplay {
   private player: Player;
+  private enemy: Enemy | null;
   private bullets: Map<number, Bullet>;
   private bulletIndex: number;
 
   constructor() {
     super();
     this.player = new Player();
+    this.enemy = new Enemy(100, 100);
     this.bullets = new Map();
     this.bulletIndex = 0;
   }
@@ -48,11 +51,25 @@ export class EnemiesGameplay extends Gameplay {
       ) {
         this.bullets.delete(id);
       }
+
+      if (this.enemy !== null) {
+        const dist = Math.sqrt(
+          Math.pow(postMove.x - this.enemy.getX(), 2) +
+            Math.pow(postMove.y - this.enemy.getY(), 2),
+        );
+        if (dist <= 10) {
+          this.enemy = null;
+          this.bullets.delete(id);
+        }
+      }
     });
   }
 
   render(ctx: CanvasRenderingContext2D): void {
     ctx.strokeStyle = "#fff";
+    if (this.enemy !== null) {
+      this.enemy.draw(ctx);
+    }
     this.bullets.forEach((bullet) => {
       const { x, y } = bullet.getData();
       ctx.beginPath();

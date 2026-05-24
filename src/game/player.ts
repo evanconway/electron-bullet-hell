@@ -2,8 +2,8 @@ import { DEFAULT_TICK_RATE } from "../constants";
 import { GameplayController } from "../controllerManager";
 import Bullet, { BulletSource } from "./bullet";
 
-const spaceship = new Image();
-spaceship.src = "../../assets/spaceship.png";
+const sprite = new Image();
+sprite.src = "../../assets/spaceship.png";
 
 class Player {
   private y: number;
@@ -61,9 +61,9 @@ class Player {
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.drawImage(
-      spaceship,
-      Math.floor(this.x - spaceship.width / 2),
-      Math.floor(this.y - spaceship.height / 2),
+      sprite,
+      Math.floor(this.x - sprite.width / 2),
+      Math.floor(this.y - sprite.height / 2),
     );
   }
 }
