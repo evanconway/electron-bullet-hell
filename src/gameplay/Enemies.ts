@@ -4,21 +4,7 @@ import { Gameplay } from "./Gameplay";
 import Player from "../game/player";
 import Bullet from "../game/bullet";
 import { DEFAULT_TICK_RATE } from "../constants";
-
-const spaceship = new Image();
-spaceship.src = "../../assets/spaceship.png";
-
-const audioContext = new AudioContext();
-const shootSound = new Audio("../../assets/shoot.wav");
-const shootTrack = audioContext.createMediaElementSource(shootSound);
-shootTrack.connect(audioContext.destination);
-
-const playShootSound = () => {
-  shootSound.pause();
-  shootSound.currentTime = 0;
-  shootSound.volume = 0.2;
-  shootSound.play();
-};
+import { playSound, Sound } from "../game/sound";
 
 export class EnemiesGameplay extends Gameplay {
   private player: Player;
@@ -43,7 +29,7 @@ export class EnemiesGameplay extends Gameplay {
     const playerBullets = this.player.update(input, timePassed);
 
     if (playerBullets.length > 0) {
-      playShootSound();
+      playSound(Sound.playerShoot, 0.2);
     }
 
     playerBullets.forEach((bullet) => this.addBullet(bullet));
@@ -65,26 +51,14 @@ export class EnemiesGameplay extends Gameplay {
     });
   }
 
-  private drawPlayer(ctx: CanvasRenderingContext2D) {
-    const { x, y } = this.player.getPosition();
-    const playerX = Math.floor(x);
-    const playerY = Math.floor(y);
-    ctx.drawImage(
-      spaceship,
-      Math.floor(playerX - spaceship.width / 2),
-      Math.floor(playerY - spaceship.height / 2),
-    );
-  }
-
   render(ctx: CanvasRenderingContext2D): void {
     ctx.strokeStyle = "#fff";
     this.bullets.forEach((bullet) => {
       const { x, y } = bullet.getData();
-      console.log(`bullet: (${x}, ${y})`);
       ctx.beginPath();
       ctx.arc(x, y, 2, 0, Math.PI * 2);
       ctx.stroke();
     });
-    this.drawPlayer(ctx);
+    this.player.draw(ctx);
   }
 }
