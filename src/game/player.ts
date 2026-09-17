@@ -23,7 +23,10 @@ class Player {
   }
 
   update(input: GameplayController, timePassed: number) {
-    const moveAmount = (timePassed / DEFAULT_TICK_RATE) * this.moveSpeed;
+    const slowButtonMod = input.x.down ? 0.5 : 1;
+
+    const moveAmount =
+      (timePassed / DEFAULT_TICK_RATE) * this.moveSpeed * slowButtonMod;
 
     const moveUp = input.up.down ? moveAmount * -1 : 0;
     const moveDown = input.down.down ? moveAmount : 0;
